@@ -1,7 +1,17 @@
 import { Table } from "../models/TableReservation.model";
 import { ApiError } from "../utils/ApiError";
 import { asyncHandler } from "../utils/AsyncHandler";
+import nodemailer from "nodemailer";
 
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  secure: true,
+  port: 465,
+  auth: {
+    user: process.env.EMAIL_USER, // Use environment variables for security
+    pass: process.env.EMAIL_PASS,
+  },
+});
 const TableData = asyncHandler(async (req, res) => {
   //Getting product Detail from frontend
   const {
@@ -40,7 +50,21 @@ const TableData = asyncHandler(async (req, res) => {
       phoneNumber,
       request,
     });
-
+    // Sending Email
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "Your Table Reservation Confirmation",
+      text: `Dear ${fullName},\n\nYour reservation for ${partySize} people on ${ReservationDate} at ${ReservationTime} has been confirmed. \n\nThank you for choosing us!\n\nBest regards,\nRestaurant Name`,
+    };
+    try {
+      // Send email
+      await transporter.sendMail(mailOptions);
+      res.status(200).send("Email sent successfully!");
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Failed to send email");
+    }
     return res
       .status(201)
       .json(new ApiResponse(200, tableData, "Table Data send Successfully..."));
