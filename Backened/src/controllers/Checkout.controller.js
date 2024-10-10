@@ -17,7 +17,6 @@ const CheckoutData = asyncHandler(async (req, res) => {
     if (!(firstName && lastName && email && phoneNumber && paymentMethod)) {
       throw new ApiError(400, "All fields are required for placing th order..");
     }
-
     const checkout = await Checkout.create({
       firstName,
       lastName,
