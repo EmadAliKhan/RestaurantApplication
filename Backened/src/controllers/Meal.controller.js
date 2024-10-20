@@ -5,13 +5,13 @@ import { asyncHandler } from "../utils/AsyncHandler.js";
 
 const MealCard = asyncHandler(async (req, res) => {
   //Getting product Detail from frontend
-  const { meal_id, meal_category, mealName, Description, Price } = req.body;
+  const { meal_id, mealCategory, mealTitle, mealDescription, mealPrice } =
+    req.body;
 
   //checking validation
-  if (!(meal_id && meal_category && mealName && Description && Price)) {
+  if (!(meal_id && mealCategory && mealTitle && mealDescription && mealPrice)) {
     throw new ApiError(400, "All Fields are required..!");
   }
-
   //Validation For Unique Product Id
   const existingMeal_id = await Meal.findOne({ meal_id: meal_id });
   if (existingMeal_id) {
@@ -29,11 +29,11 @@ const MealCard = asyncHandler(async (req, res) => {
   }
   //Sending to Database
   const meal = await Meal.create({
-    meal_id,
-    meal_category,
-    mealName,
-    Description,
-    Price,
+    meal_id: meal_id,
+    meal_category: mealCategory,
+    mealName: mealTitle,
+    Description: mealDescription,
+    Price: mealPrice,
     meal_image: meal_image,
   });
 

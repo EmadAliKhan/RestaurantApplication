@@ -11,13 +11,13 @@ app.use(cors());
 import MealRouter from "./routes/Meal.routes.js";
 import ContactRouter from "./routes/Contact.routes.js";
 import TableReservationRouter from "./routes/TableReservation.routes.js";
-import UserRouter from "./routes/User.routes.js";
+import AdminRouter from "./routes/Admin.routes.js";
 import CheckoutRouter from "./routes/Checkout.routes.js";
 
 app.use("api/v1", MealRouter);
 app.use("api/v1", ContactRouter);
 app.use("api/v1", TableReservationRouter);
-app.use("api/v1", UserRouter);
+app.use("api/v1", AdminRouter);
 app.use("api/v1", CheckoutRouter);
 
 export { app };

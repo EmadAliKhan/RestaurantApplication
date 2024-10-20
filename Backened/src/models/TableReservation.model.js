@@ -6,6 +6,10 @@ const TableData = new mongoose.Schema(
       type: String,
       required: true,
     },
+    ReservationDay: {
+      type: String,
+      required: true,
+    },
     ReservationTime: {
       type: String,
       required: true,

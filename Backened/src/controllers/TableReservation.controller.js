@@ -6,40 +6,44 @@ import { asyncHandler } from "../utils/AsyncHandler.js";
 const TableData = asyncHandler(async (req, res) => {
   //Getting product Detail from frontend
   const {
-    ReservationDate,
-    ReservationTime,
-    email,
     fullName,
-    occassion,
-    partySize,
     phoneNumber,
+    email,
+    occassion,
     request,
+    ReservationDate,
+    ReservationDay,
+    ReservationTime,
+    partySize,
   } = req.body;
 
   try {
     //checking validation
     if (
       !(
-        ReservationDate &&
-        ReservationTime &&
-        email &&
         fullName &&
+        phoneNumber &&
+        email &&
         occassion &&
-        partySize &&
-        phoneNumber
+        request &&
+        ReservationDate &&
+        ReservationDay &&
+        ReservationTime &&
+        partySize
       )
     ) {
       throw new ApiError(400, "All Fields are required..!");
     }
     const tableData = await Table.create({
-      ReservationDate,
-      ReservationTime,
-      email,
-      fullName,
-      occassion,
-      partySize,
-      phoneNumber,
-      request,
+      fullName: fullName,
+      phoneNumber: phoneNumber,
+      email: email,
+      occassion: occassion,
+      request: request,
+      ReservationDate: ReservationDate,
+      ReservationDay: ReservationDay,
+      ReservationTime: ReservationTime,
+      partySize: partySize,
     });
 
     return res

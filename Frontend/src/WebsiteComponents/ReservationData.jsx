@@ -33,7 +33,8 @@ const ReservationData = ({ modal, setModal, date, time, size, day }) => {
       email,
       occassion,
       request,
-      ReservationDate: date + day,
+      ReservationDate: date,
+      ReservationDay: day,
       ReservationTime: time,
       partySize: size,
     };
