@@ -11,11 +11,10 @@ const options = {
   method: "GET",
   url: "https://chinese-food-db.p.rapidapi.com/",
   headers: {
-    "x-rapidapi-key": "87ab7b8d80mshb8ff1775c060fc0p1c1041jsn0008d9232799",
+    "x-rapidapi-key": "ac4aab79f1msh5bbc81a078dd7d2p1993eajsn2de66297c5fe",
     "x-rapidapi-host": "chinese-food-db.p.rapidapi.com",
   },
 };
-
 export const fetchProduct = createAsyncThunk(
   "product/fetch",
   async (_, { rejectWithValue }) => {
