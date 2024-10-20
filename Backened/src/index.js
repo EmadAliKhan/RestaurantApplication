@@ -1,11 +1,13 @@
 import { app } from "./app.js";
 import connectDB from "./db/DB.js";
 import dotenv from "dotenv";
-const http = require("http");
+// const http = require("http");
+import http from "http";
 dotenv.config({
   path: "./env",
 });
 
+const PORT = 5000;
 const server = http.createServer(app);
 connectDB()
   .then(() => {

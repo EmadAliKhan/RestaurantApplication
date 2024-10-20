@@ -7,6 +7,8 @@ import Reservation from "../WebsitePages/Reservation";
 import Contact from "../WebsitePages/Contact";
 import ConfirmReservation from "../WebsitePages/ConfirmReservation";
 import Checkout from "../WebsitePages/Checkout";
+import AdminForm from "../AdminPages/AdminForm";
+import AdminDashboard from "../AdminPages/AdminDashboard";
 
 const WebRoutes = () => {
   return (
@@ -19,6 +21,8 @@ const WebRoutes = () => {
         <Route path="/contact" element={<Contact />} />
         <Route path="/confirm" element={<ConfirmReservation />} />
         <Route path="/checkout" element={<Checkout />} />
+        <Route path="/admin" element={<AdminForm />} />
+        <Route path="/adminPortal/*" element={<AdminDashboard />} />
       </Routes>
     </>
   );

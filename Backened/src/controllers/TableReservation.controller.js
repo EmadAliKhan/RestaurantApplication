@@ -1,7 +1,7 @@
-import { Table } from "../models/TableReservation.model";
-import { ApiError } from "../utils/ApiError";
-import { asyncHandler } from "../utils/AsyncHandler";
-import nodemailer from "nodemailer";
+import { Table } from "../models/TableReservation.model.js";
+import { ApiError } from "../utils/ApiError.js";
+import { asyncHandler } from "../utils/AsyncHandler.js";
+// import nodemailer from "nodemailer";
 
 const TableData = asyncHandler(async (req, res) => {
   //Getting product Detail from frontend
