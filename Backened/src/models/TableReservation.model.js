@@ -36,7 +36,7 @@ const TableData = new mongoose.Schema(
     },
     request: {
       type: String,
-      default: ["No request From Client"],
+      default: "No request From Client",
     },
   },
   { timestamps: true }

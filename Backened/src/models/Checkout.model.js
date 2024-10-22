@@ -25,10 +25,13 @@ const CheckoutSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    addToCart: {
-      type: Array,
-      required: true,
-    },
+    addToCart: [
+      {
+        name: { type: String, required: true },
+        quantity: { type: Number, required: true },
+        price: { type: Number, required: true },
+      },
+    ],
   },
   { timestamps: true }
 );
