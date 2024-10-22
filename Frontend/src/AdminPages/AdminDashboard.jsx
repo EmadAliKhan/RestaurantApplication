@@ -300,7 +300,6 @@ export default function AdminDashboard() {
             >
               <ListItemButton onClick={() => navigateHandler(route.path)}>
                 {" "}
-                {/* Corrected from routes1.path to route.path */}
                 <ListItemIcon sx={{ minWidth: "48px", color: "black" }}>
                   {React.cloneElement(route.icon, { sx: { fontSize: "2rem" } })}
                 </ListItemIcon>
