@@ -2,6 +2,7 @@ import { Meal } from "../models/Meal.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/AsyncHandler.js";
+import { uploadOnCloudinary } from "../utils/Cloudinary.js";
 
 const MealCard = asyncHandler(async (req, res) => {
   //Getting product Detail from frontend
@@ -9,7 +10,13 @@ const MealCard = asyncHandler(async (req, res) => {
     req.body;
 
   //checking validation
-  if (!(meal_id && mealCategory && mealTitle && mealDescription && mealPrice)) {
+  if (
+    !meal_id &&
+    !mealCategory &&
+    !mealTitle &&
+    !mealDescription &&
+    !mealPrice
+  ) {
     throw new ApiError(400, "All Fields are required..!");
   }
   //Validation For Unique Product Id
@@ -23,8 +30,8 @@ const MealCard = asyncHandler(async (req, res) => {
     throw new ApiError(400, "meal_image is required...");
   }
   //upload on Cloudinary
-  const meal_image = await uploadOnCloudinary(imageLocalPath);
-  if (!meal_image) {
+  const image = await uploadOnCloudinary(imageLocalPath);
+  if (!image) {
     throw new ApiError(400, "image field is required...");
   }
   //Sending to Database
@@ -34,7 +41,7 @@ const MealCard = asyncHandler(async (req, res) => {
     mealName: mealTitle,
     Description: mealDescription,
     Price: mealPrice,
-    meal_image: meal_image,
+    image: image,
   });
 
   //Sending to Frontend

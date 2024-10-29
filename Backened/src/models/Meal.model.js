@@ -4,28 +4,23 @@ const MealSchema = new mongoose.Schema(
   {
     meal_id: {
       type: String,
-      required: true,
+
       unique: true,
     },
     meal_category: {
-      type: Array,
-      required: true,
-    },
-    mealName: {
       type: String,
-      required: true,
     },
-    Description: {
+    mealTitle: {
       type: String,
-      required: true,
+    },
+    mealDescription: {
+      type: String,
     },
     Price: {
-      type: String,
-      required: true,
+      type: Number,
     },
-    mealImage: {
+    image: {
       type: String,
-      required: true,
     },
   },
   { timestamps: true }
