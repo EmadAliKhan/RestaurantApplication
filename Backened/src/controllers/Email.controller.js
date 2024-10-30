@@ -26,8 +26,8 @@ const AcceptedOrder = asyncHandler(async (req, res) => {
   }
 
   const mailOptions = {
-    from: process.env.EMAIL_USER,
-    to: order.email,
+    from: process.env.EMAIL_USER || "emadalikhan5@gmail.com",
+    to: order.email || "merajali@gmail.com",
     subject: "Order Accepted",
     text: `Dear ${order.firstName} ${order.lastName},\n\nYour order of ${
       order.addToCart[0].name // Assuming `addToCart` is an array and accessing the first item

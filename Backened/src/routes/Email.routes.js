@@ -4,7 +4,7 @@ import {
   AcceptedReservation,
   RejectedOrder,
   RejectedReservation,
-} from "../controllers/Email.controller";
+} from "../controllers/Email.controller.js";
 
 const router = Router();
 

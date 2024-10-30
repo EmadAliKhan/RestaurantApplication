@@ -8,7 +8,7 @@ import {
 const router = Router();
 
 router.route("/checkout").post(CheckoutData);
-router.route("/getcheckout").post(GetCheckoutData);
-router.route("/delcheckout").post(DelCheckoutData);
+router.route("/getcheckout").get(GetCheckoutData);
+router.route("/delcheckout/:id").delete(DelCheckoutData);
 
 export default router;

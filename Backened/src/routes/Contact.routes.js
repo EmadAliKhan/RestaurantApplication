@@ -9,6 +9,6 @@ const router = Router();
 
 router.route("/message").post(ContactMessage);
 router.route("/getMessage").get(GetContactMessage);
-router.route("/deleteMessage").delete(DeleContactMessage);
+router.route("/deleteMessage/:id").delete(DeleContactMessage);
 
 export default router;
