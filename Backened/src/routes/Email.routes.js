@@ -8,9 +8,9 @@ import {
 
 const router = Router();
 
-router.route("/acceptedOrder").post(AcceptedOrder);
-router.route("/rejectedOrder").post(RejectedOrder);
-router.route("/acceptedReservation").post(AcceptedReservation);
-router.route("/rejectedReservation").post(RejectedReservation);
+router.route("/acceptedOrder:id").post(AcceptedOrder);
+router.route("/rejectedOrder:id").post(RejectedOrder);
+router.route("/acceptedReservation:id").post(AcceptedReservation);
+router.route("/rejectedReservation:id").post(RejectedReservation);
 
 export default router;

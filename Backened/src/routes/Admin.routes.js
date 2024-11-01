@@ -4,6 +4,6 @@ import { LoginUser, RegisterUser } from "../controllers/Admin.controller.js";
 const router = Router();
 
 router.route("/regiter").post(RegisterUser);
-router.route("/login").get(LoginUser);
+router.route("/login").post(LoginUser);
 
 export default router;

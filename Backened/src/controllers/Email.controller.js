@@ -1,143 +1,133 @@
 import { Checkout } from "../models/Checkout.model.js";
 import { Table } from "../models/TableReservation.model.js";
+import { ApiError } from "../utils/ApiError.js";
+import { ApiResponse } from "../utils/ApiResponse";
 import { asyncHandler } from "../utils/AsyncHandler.js";
-import nodemailer from "nodemailer";
-
-// Create the email transporter once
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  secure: true,
-  port: 465,
-  auth: {
-    user: process.env.EMAIL_USER, // Use environment variables for security
-    pass: process.env.EMAIL_PASS,
-  },
-});
+import sendMail from "../utils/Nodemailer.js";
 
 const AcceptedOrder = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-
-  // Fetch the order details by ID
-  const order = await Checkout.findById(id);
-
-  // Error handling if order is not found
-  if (!order) {
-    return res.status(404).send("Order not found");
-  }
-
-  const mailOptions = {
-    from: process.env.EMAIL_USER || "emadalikhan5@gmail.com",
-    to: order.email || "merajali@gmail.com",
-    subject: "Order Accepted",
-    text: `Dear ${order.firstName} ${order.lastName},\n\nYour order of ${
-      order.addToCart[0].name // Assuming `addToCart` is an array and accessing the first item
-    } has been confirmed. \n\nThank you for choosing us!\n\nBest regards,\nFresco Restaurant`,
-  };
-
   try {
-    // Send the email
-    await transporter.sendMail(mailOptions);
-    res.status(200).send("Email sent successfully!");
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Failed to send email");
-  }
-});
+    const { id } = req.params;
+    // Fetch the order details by ID
+    const AccOrder = await Checkout.findById(id);
 
-const RejectedOrder = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-
-  // Fetch the order details by ID
-  const RejectedOrder = await Checkout.findById(id);
-
-  // Error handling if order is not found
-  if (!RejectedOrder) {
-    return res.status(404).send("Order not found");
-  }
-  const mailOptions = {
-    from: process.env.EMAIL_USER,
-    to: RejectedOrder.email,
-    subject: "Order Accepted",
-    text: `Dear ${RejectedOrder.firstName} ${
-      RejectedOrder.lastName
+    // Error handling if order is not found
+    if (!order) {
+      throw new ApiError(400, "Order not found..!");
+    }
+    const sub = "Order Accepted";
+    const msg = `Dear ${AccOrder.firstName} ${
+      AccOrder.lastName
     },\n\nYour order of ${
-      RejectedOrder.addToCart[0].name // Assuming `addToCart` is an array and accessing the first item
-    } has been confirmed. \n\nThank you for choosing us!\n\nBest regards,\nFresco Restaurant`,
-  };
-
-  try {
-    // Send the email
-    await transporter.sendMail(mailOptions);
-    res.status(200).send("Email sent successfully!");
+      AccOrder.addToCart[0].name // Assuming `addToCart` is an array and accessing the first item
+    } has been confirmed. \n\nThank you for choosing us!\n\nBest regards,\nFresco Restaurant`;
+    sendMail(AccOrder.email, sub, msg);
+    return res
+      .status(201)
+      .json(
+        new ApiResponse(
+          200,
+          "success",
+          "The email has sent successfully for accepted order..."
+        )
+      );
   } catch (error) {
-    console.error(error);
-    res.status(500).send("Failed to send email");
+    res.send(error.message);
   }
 });
-const AcceptedReservation = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-
-  // Fetch the order details by ID
-  const AcceptedReservation = await Table.findById(id);
-
-  // Error handling if order is not found
-  if (!AcceptedReservation) {
-    return res.status(404).send("Order not found");
-  }
-
-  const mailOptions = {
-    from: process.env.EMAIL_USER,
-    to: AcceptedReservation.email,
-    subject: "Order Accepted",
-    text: `Dear ${AcceptedReservation.fullName},\n\nYour reservation for
-     ${AcceptedReservation.partySize} people on ${AcceptedReservation.ReservationDate} at ${AcceptedReservation.ReservationTime}
-      has been confirmed. \n\nThank you for choosing us!\n\nBest regards,\nRestaurant Name,
-`,
-  };
-
+const RejectedOrder = asyncHandler(async (req, res) => {
   try {
-    // Send the email
-    await transporter.sendMail(mailOptions);
-    res.status(200).send("Email sent successfully!");
+    const { id } = req.params;
+    // Fetch the order details by ID
+    const RejOrder = await Checkout.findById(id);
+
+    // Error handling if order is not found
+    if (!RejOrder) {
+      throw new ApiError(400, "Order not found..!");
+    }
+    const sub = "Order Accepted";
+    const msg = `Dear ${RejOrder.firstName} ${
+      RejOrder.lastName
+    },\n\nYour order of ${
+      RejOrder.addToCart[0].name // Assuming `addToCart` is an array and accessing the first item
+    } has been rejected due to some issues. \n\nThank you for choosing us!\n\nBest regards,\nFresco Restaurant`;
+    sendMail(RejOrder.email, sub, msg);
+
+    return res
+      .status(201)
+      .json(
+        new ApiResponse(
+          200,
+          "success",
+          "The email has sent successfully for rejected order..."
+        )
+      );
   } catch (error) {
-    console.error(error);
-    res.status(500).send("Failed to send email");
+    res.send(error.message);
   }
 });
+
+const AccpetedReservation = asyncHandler(async (req, res) => {
+  try {
+    const { id } = req.params;
+    const AccReservation = await Table.findById(id);
+    if (!AccReservation) {
+      throw new ApiError(400, "reservation not found..!");
+    }
+
+    const sub = "Reservation Accepted";
+    const msg = `Dear ${AccReservation.fullName},\n\nYour reservation for
+      ${AccReservation.partySize} people on ${AccReservation.ReservationDate} at ${AccReservation.ReservationTime}
+       has been confirmed. \n\nThank you for choosing us!\n\nBest regards,\nRestaurant Name,
+ `;
+
+    sendMail(AccReservation.email, sub, msg);
+    return res
+      .status(201)
+      .json(
+        new ApiResponse(
+          200,
+          "success",
+          "The email has sent successfully for accepted Reservation..."
+        )
+      );
+  } catch (error) {
+    res.send(error.message);
+  }
+});
+
 const RejectedReservation = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-
-  // Fetch the order details by ID
-  const RejectedReservation = await Table.findById(id);
-
-  // Error handling if order is not found
-  if (!RejectedReservation) {
-    return res.status(404).send("Order not found");
-  }
-
-  const mailOptions = {
-    from: process.env.EMAIL_USER,
-    to: RejectedReservation.email,
-    subject: "Order Rejected",
-    text: `Dear ${RejectedReservation.fullName},\n\nYour reservation for
-     ${RejectedReservation.partySize} people on ${RejectedReservation.ReservationDate} at ${RejectedReservation.ReservationTime}
-      has been rejected for some issues. \n\nThank you for choosing us!\n\nBest regards,\nRestaurant Name,
-`,
-  };
-
   try {
-    // Send the email
-    await transporter.sendMail(mailOptions);
-    res.status(200).send("Email sent successfully!");
+    const { id } = req.params;
+    const RejReservation = await Table.findById(id);
+    if (!RejReservation) {
+      throw new ApiError(400, "data not found..!");
+    }
+
+    const sub = "Reservation Accepted";
+    const msg = `Dear ${RejReservation.fullName},\n\nYour reservation for
+      ${RejReservation.partySize} people on ${RejReservation.ReservationDate} at ${RejReservation.ReservationTime}
+       has been rejected due to some issues. \n\nThank you for choosing us!\n\nBest regards,\nRestaurant Name,
+ `;
+
+    sendMail(RejReservation.email, sub, msg);
+    return res
+      .status(201)
+      .json(
+        new ApiResponse(
+          200,
+          "success",
+          "The email has sent successfully for rejected reservation..."
+        )
+      );
   } catch (error) {
-    console.error(error);
-    res.status(500).send("Failed to send email");
+    res.send(error.message);
   }
 });
 
 export {
   AcceptedOrder,
-  AcceptedReservation,
   RejectedOrder,
+  AccpetedReservation,
   RejectedReservation,
 };
